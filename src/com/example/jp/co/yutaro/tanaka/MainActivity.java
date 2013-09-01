@@ -1,15 +1,13 @@
 package com.example.jp.co.yutaro.tanaka;
 
-import com.example.jp.co.yutaro.tanaka.twitter.TwitterOAuthActivity;
-import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
-
-import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
+
+import com.example.jp.co.yutaro.tanaka.twitter.TwitterOAuthActivity;
+import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
 
 public class MainActivity extends FragmentActivity {
 
@@ -27,8 +25,9 @@ public class MainActivity extends FragmentActivity {
 			FragmentTransaction transaction = manager.beginTransaction();
 
 			CategoryFragment categoryFragment = CategoryFragment.newInstance();
-	
-			transaction.replace(android.R.id.content, categoryFragment, "categoryFragment");
+
+			transaction.replace(android.R.id.content, categoryFragment,
+					"categoryFragment");
 			transaction.commit();
 		}
 	}

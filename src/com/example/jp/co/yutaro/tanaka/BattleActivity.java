@@ -1,39 +1,25 @@
 package com.example.jp.co.yutaro.tanaka;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.example.jp.co.yutaro.tanaka.twitter.TweetAdapter;
-import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
-import com.loopj.android.image.SmartImageView;
-
-import twitter4j.ResponseList;
-import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.CycleInterpolator;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,6 +27,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.jp.co.yutaro.tanaka.sound.GameSound;
+import com.example.jp.co.yutaro.tanaka.twitter.TweetAdapter;
+import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
 
 public class BattleActivity extends FragmentActivity implements OnClickListener {
 
@@ -62,18 +52,13 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	private Roll player, enemy;
 	private ProgressBar playerHpBar, enemyHpBar;
 
-	// Sound
-	private SoundPool mSoundPool;
-	private int mSoundId_atk;
-	private int mSoundId_def;
-	private int mSoundId_tame;
-	private MediaPlayer bgm;
-
 	private TextView msgView;
 
 	private Handler mHandler = new Handler(Looper.getMainLooper());
 	private Runnable runEnemyAttack, udtTxtUsrTurn, udtTxtEnmTurn,
 			udtTxtUsrDmg, udtTxtEnmDmg;
+
+	private GameSound mGameSound;
 
 	int enemyDamage;
 	int nowEnemyHp;
@@ -86,24 +71,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_battle);
 
-		// Sound
-		mSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
-		mSoundId_atk = mSoundPool.load(this, R.raw.kirare03, 1);
-		mSoundId_def = mSoundPool.load(this, R.raw.kick2, 1);
-		mSoundId_tame = mSoundPool.load(this, R.raw.tame, 1);
-
-		bgm = MediaPlayer.create(this, R.raw.bgm);
-		bgm.setLooping(true);
-		try {
-			bgm.prepare();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		bgm.start();
-
-		// �{�^������
 		reloadBtn = (ImageButton) findViewById(R.id.reloadBtn);
 		tweetBtn = (ImageButton) findViewById(R.id.tweetBtn);
 		defendBtn = (ImageButton) findViewById(R.id.defendBtn);
@@ -111,39 +78,28 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		tweetBtn.setOnClickListener(this);
 		defendBtn.setOnClickListener(this);
 
-		// extends ListActivity ��������
 		list = (ListView) findViewById(R.id.tweetTLView);
 		mAdapter = new TweetAdapter(this);
 		list.setAdapter(mAdapter);
-		// Tweet ����
 		mTwitter = TwitterUtils.getTwitterInstance(this);
 		reloadTimeLine();
 
-		// Player Dragon
-		player = new Roll(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
-				PLAYER_DEFAULT_DEFEND);
-		enemy = new Roll(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
-				DRAGON_DEFAULT_DEFEND);
+		initRolls();
 
-		// HP
-		playerHpBar = (ProgressBar) findViewById(R.id.playerHpBar);
-		enemyHpBar = (ProgressBar) findViewById(R.id.enemyHpBar);
-		playerHpBar.setMax(PLAYER_DEFAULT_HP);
-		enemyHpBar.setMax(DRAGON_DEFAULT_HP);
-		playerHpBar.setBackgroundColor(Color.GREEN);
-		enemyHpBar.setBackgroundColor(Color.GREEN);
+		mGameSound = new GameSound(this);
 
-		nowUserHp = enemy.getHp();
-		playerHpBar.setProgress(nowUserHp);
-		nowEnemyHp = enemy.getHp();
-		enemyHpBar.setProgress(nowEnemyHp);
-
-		// ���b�Z�[�W�r���[��������
 		msgView = (TextView) findViewById(R.id.message);
 
-		// �o�g���X�^�[�g���A���[�g
 		showToast(getString(R.string.game_start_toast));
 
+		initRunnable();
+
+		msgView.setText("Encount Dragon !!!");
+		mHandler.postDelayed(udtTxtUsrTurn, 3000);
+
+	}
+
+	private void initRunnable() {
 		runEnemyAttack = new Runnable() {
 			public void run() {
 				enemyAttack();
@@ -169,33 +125,47 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 				msgView.setText(userDamage + " damage !");
 			}
 		};
+	}
 
-		msgView.setText("Encount Dragon !!!");
-		mHandler.postDelayed(udtTxtUsrTurn, 3000);
+	private void initRolls() {
+		player = new Roll(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
+				PLAYER_DEFAULT_DEFEND);
+		enemy = new Roll(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
+				DRAGON_DEFAULT_DEFEND);
 
+		playerHpBar = (ProgressBar) findViewById(R.id.playerHpBar);
+		enemyHpBar = (ProgressBar) findViewById(R.id.enemyHpBar);
+		playerHpBar.setMax(PLAYER_DEFAULT_HP);
+		enemyHpBar.setMax(DRAGON_DEFAULT_HP);
+		playerHpBar.setBackgroundColor(Color.GREEN);
+		enemyHpBar.setBackgroundColor(Color.GREEN);
+
+		nowUserHp = enemy.getHp();
+		playerHpBar.setProgress(nowUserHp);
+		nowEnemyHp = enemy.getHp();
+		enemyHpBar.setProgress(nowEnemyHp);
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		bgm.stop();
-		bgm.release();
+		mGameSound.bgm.stop();
+		mGameSound.bgm.release();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		// BGM�����~
-		bgm = MediaPlayer.create(this, R.raw.bgm);
-		bgm.setLooping(true);
+		mGameSound.bgm = MediaPlayer.create(this, R.raw.bgm);
+		mGameSound.bgm.setLooping(true);
 		try {
-			bgm.prepare();
+			mGameSound.bgm.prepare();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		bgm.start();
+		mGameSound.bgm.start();
 	}
 
 	public void onClick(View v) {
@@ -212,7 +182,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		}
 	}
 
-	// animation
 	public void renderPlayerIcon() {
 		ImageView playerImg = (ImageView) findViewById(R.id.PlayerPicView);
 		AlphaAnimation alpha = new AlphaAnimation(1, 0);
@@ -229,19 +198,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		enemyImg.startAnimation(alpha);
 	}
 
-	// Sound Control
-	public void playSoundAtk() {
-		mSoundPool.play(mSoundId_atk, 1.0F, 1.0F, 0, 0, 1.0F);
-	}
-
-	public void playSoundDef() {
-		mSoundPool.play(mSoundId_def, 1.0F, 1.0F, 0, 0, 1.0F);
-	}
-
-	public void playSoundTame() {
-		mSoundPool.play(mSoundId_tame, 1.0F, 1.0F, 0, 0, 1.0F);
-	}
-
 	private void tweetDialog() {
 		AlertDialog.Builder tweetDialog = new AlertDialog.Builder(this);
 		final EditText editView = new EditText(BattleActivity.this);
@@ -256,7 +212,9 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 						contentsTweet = editView.getText().toString();
 						// Tweet
 						// TODO 入力チェック
+						// TODO 文字数制限
 						if (contentsTweet != null || contentsTweet.equals("")) {
+							// TODO Tweet にハッシュタグを付け加える
 							tweet(contentsTweet);
 							userAtttack();
 							mHandler.postDelayed(udtTxtEnmTurn, 3000);
@@ -328,9 +286,9 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	}
 
 	private void userAtttack() {
-		playSoundAtk();
+		mGameSound.playSoundAtk();
 		renderEnemyIcon();
-		playSoundDef();
+		mGameSound.playSoundDef();
 
 		enemyDamage = player.userAttack(enemy, contentsTweet);
 
@@ -355,9 +313,9 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	private void enemyAttack() {
 		userDamage = enemy.dragonAttack(player);
 
-		playSoundAtk();
+		mGameSound.playSoundAtk();
 		renderPlayerIcon();
-		playSoundDef();
+		mGameSound.playSoundDef();
 
 		nowUserHp = enemy.getHp();
 		playerHpBar.setProgress(nowUserHp);
