@@ -10,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.jp.co.yutaro.tanaka.R;
-import com.example.jp.co.yutaro.tanaka.R.id;
-import com.example.jp.co.yutaro.tanaka.R.layout;
 import com.loopj.android.image.SmartImageView;
 
 public class TweetAdapter extends ArrayAdapter<twitter4j.Status> {

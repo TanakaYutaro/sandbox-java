@@ -18,8 +18,6 @@ import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.CycleInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jp.co.yutaro.tanaka.animation.RenderImage;
 import com.example.jp.co.yutaro.tanaka.sound.GameSound;
 import com.example.jp.co.yutaro.tanaka.twitter.TweetAdapter;
 import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
@@ -54,6 +53,9 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 
 	private TextView msgView;
 
+	private ImageView mPlayerImg, mEnemyImg;
+	private RenderImage mRenderImage;
+
 	private Handler mHandler = new Handler(Looper.getMainLooper());
 	private Runnable runEnemyAttack, udtTxtUsrTurn, udtTxtEnmTurn,
 			udtTxtUsrDmg, udtTxtEnmDmg;
@@ -77,6 +79,10 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		reloadBtn.setOnClickListener(this);
 		tweetBtn.setOnClickListener(this);
 		defendBtn.setOnClickListener(this);
+
+		mPlayerImg = (ImageView) findViewById(R.id.PlayerPicView);
+		mEnemyImg = (ImageView) findViewById(R.id.dragonPicView);
+		mRenderImage = new RenderImage();
 
 		list = (ListView) findViewById(R.id.tweetTLView);
 		mAdapter = new TweetAdapter(this);
@@ -182,22 +188,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		}
 	}
 
-	public void renderPlayerIcon() {
-		ImageView playerImg = (ImageView) findViewById(R.id.PlayerPicView);
-		AlphaAnimation alpha = new AlphaAnimation(1, 0);
-		alpha.setDuration(1000);
-		alpha.setInterpolator(new CycleInterpolator(3));
-		playerImg.startAnimation(alpha);
-	}
-
-	public void renderEnemyIcon() {
-		ImageView enemyImg = (ImageView) findViewById(R.id.dragonPicView);
-		AlphaAnimation alpha = new AlphaAnimation(1, 0);
-		alpha.setDuration(1000);
-		alpha.setInterpolator(new CycleInterpolator(3));
-		enemyImg.startAnimation(alpha);
-	}
-
 	private void tweetDialog() {
 		AlertDialog.Builder tweetDialog = new AlertDialog.Builder(this);
 		final EditText editView = new EditText(BattleActivity.this);
@@ -287,7 +277,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 
 	private void userAtttack() {
 		mGameSound.playSoundAtk();
-		renderEnemyIcon();
+		mRenderImage.renderCharacterIcon(mEnemyImg);
 		mGameSound.playSoundDef();
 
 		enemyDamage = player.userAttack(enemy, contentsTweet);
@@ -314,7 +304,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		userDamage = enemy.dragonAttack(player);
 
 		mGameSound.playSoundAtk();
-		renderPlayerIcon();
+		mRenderImage.renderCharacterIcon(mPlayerImg);
 		mGameSound.playSoundDef();
 
 		nowUserHp = enemy.getHp();
@@ -369,6 +359,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 			@Override
 			protected List<twitter4j.Status> doInBackground(Void... params) {
 				try {
+					// TODO ハッシュタグのツイートのみ表示
 					return mTwitter.getHomeTimeline();
 				} catch (TwitterException e) {
 					e.printStackTrace();
