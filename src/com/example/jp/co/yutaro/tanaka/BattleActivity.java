@@ -252,7 +252,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						contentsTweet = editView.getText().toString();
-						// Tweet ���A������
+						// Tweet
 						if (contentsTweet != null) {
 							tweet(contentsTweet);
 							// ���[�U���U��
@@ -272,11 +272,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		alertDialog.show();
 	}
 
-	/**
-	 * �Q�[���I�[�o�[�����_�C�A���O������������.
-	 * 
-	 * @author tanaka_yut
-	 */
 	private void createFailureDialog() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Failure .......");
@@ -301,11 +296,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		alertDialog.show();
 	}
 
-	/**
-	 * �Q�[���I�������I���_�C�A���O������������.
-	 * 
-	 * @author tanaka_yut
-	 */
 	private void createEndDialog() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("You Win !!!!!!!!!!!!!!!!.");
@@ -474,40 +464,5 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
 
-	private class TweetAdapter extends ArrayAdapter<twitter4j.Status> {
-
-		private LayoutInflater mInflater;
-
-		public TweetAdapter(Context context) {
-			super(context, android.R.layout.simple_list_item_1);
-			// mInflater = (LayoutInflater)
-			// context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			mInflater = (LayoutInflater) context
-					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.list_item_tweet, null);
-			}
-			Status item = getItem(position);
-
-			TextView name = (TextView) convertView.findViewById(R.id.name);
-			name.setText(item.getUser().getName());
-
-			TextView screenName = (TextView) convertView
-					.findViewById(R.id.screen_name);
-			screenName.setText("@" + item.getUser().getScreenName());
-
-			TextView text = (TextView) convertView.findViewById(R.id.text);
-			text.setText(item.getText());
-
-			SmartImageView icon = (SmartImageView) convertView
-					.findViewById(R.id.icon);
-			icon.setImageUrl(item.getUser().getProfileImageURL());
-			return convertView;
-		}
-	}
-
+	
 }

@@ -11,22 +11,20 @@ import android.webkit.WebView.FindListener;
 import android.widget.Button;
 
 public class CategoryFragment extends Fragment implements OnClickListener {
-	
-	/**
-	 * フラグメントを生成するインスタンス.
-	 */
+
 	public static CategoryFragment newInstance() {
 		CategoryFragment categoryFragment = new CategoryFragment();
 		return categoryFragment;
 	}
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View root = inflater.inflate(R.layout.fragment_category, container, false);
-		
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View root = inflater.inflate(R.layout.fragment_category, container,
+				false);
+
 		root.findViewById(R.id.button_start_dragon).setOnClickListener(this);
-		
+
 		return root;
 	}
 
