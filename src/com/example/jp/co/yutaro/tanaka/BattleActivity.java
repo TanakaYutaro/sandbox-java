@@ -41,57 +41,55 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class BattleActivity extends FragmentActivity implements OnClickListener {
-	
+
 	private String contentsTweet;
 	private ImageButton reloadBtn, tweetBtn, defendBtn;
-	
+
 	private TweetAdapter mAdapter;
-    private Twitter mTwitter;
-    private ListView list;
-    
-    private static final int PLAYER_DEFAULT_HP = 100;
-    private static final int PLAYER_DEFAULT_POWER = 10;
-    private static final int PLAYER_DEFAULT_DEFEND = 10;
-    
-    private static final int DRAGON_DEFAULT_HP = 200;
-    private static final int DRAGON_DEFAULT_POWER = 40;
-    private static final int DRAGON_DEFAULT_DEFEND = 40;
-    
-    private Roll player, enemy;
-    private ProgressBar playerHpBar, enemyHpBar;
-    
- // Sound
- 	private SoundPool mSoundPool;
- 	private int mSoundId_atk;
- 	private int mSoundId_def;
- 	private int mSoundId_tame;
- 	private MediaPlayer bgm;
- 	
- 	private TextView msgView;
- 	
- 	/** ƒXƒŒƒbƒhUI‘€ì—pƒnƒ“ƒhƒ‰ */
- 	private Handler mHandler = new Handler(Looper.getMainLooper());
- 	/** ƒeƒLƒXƒgƒIƒuƒWƒFƒNƒg */
- 	private Runnable runEnemyAttack,
- 		udtTxtUsrTurn, udtTxtEnmTurn, udtTxtUsrDmg, udtTxtEnmDmg;
- 	
- 	int enemyDamage;
+	private Twitter mTwitter;
+	private ListView list;
+
+	private static final int PLAYER_DEFAULT_HP = 100;
+	private static final int PLAYER_DEFAULT_POWER = 10;
+	private static final int PLAYER_DEFAULT_DEFEND = 10;
+
+	private static final int DRAGON_DEFAULT_HP = 200;
+	private static final int DRAGON_DEFAULT_POWER = 40;
+	private static final int DRAGON_DEFAULT_DEFEND = 40;
+
+	private Roll player, enemy;
+	private ProgressBar playerHpBar, enemyHpBar;
+
+	// Sound
+	private SoundPool mSoundPool;
+	private int mSoundId_atk;
+	private int mSoundId_def;
+	private int mSoundId_tame;
+	private MediaPlayer bgm;
+
+	private TextView msgView;
+
+	private Handler mHandler = new Handler(Looper.getMainLooper());
+	private Runnable runEnemyAttack, udtTxtUsrTurn, udtTxtEnmTurn,
+			udtTxtUsrDmg, udtTxtEnmDmg;
+
+	int enemyDamage;
 	int nowEnemyHp;
-	
+
 	int userDamage;
 	int nowUserHp;
-    
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_battle);
-		
-		// Sound‚Ì“Ç‚İ‚İ
+
+		// Sound
 		mSoundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
 		mSoundId_atk = mSoundPool.load(this, R.raw.kirare03, 1);
 		mSoundId_def = mSoundPool.load(this, R.raw.kick2, 1);
 		mSoundId_tame = mSoundPool.load(this, R.raw.tame, 1);
-		
+
 		bgm = MediaPlayer.create(this, R.raw.bgm);
 		bgm.setLooping(true);
 		try {
@@ -102,73 +100,79 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 			e.printStackTrace();
 		}
 		bgm.start();
-		
-		// ƒ{ƒ^ƒ“æ“¾
+
+		// ï¿½{ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		reloadBtn = (ImageButton) findViewById(R.id.reloadBtn);
 		tweetBtn = (ImageButton) findViewById(R.id.tweetBtn);
 		defendBtn = (ImageButton) findViewById(R.id.defendBtn);
 		reloadBtn.setOnClickListener(this);
 		tweetBtn.setOnClickListener(this);
 		defendBtn.setOnClickListener(this);
-		
 
-		// extends ListActivity ‚Ì‘ã‚í‚è
+		// extends ListActivity ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		list = (ListView) findViewById(R.id.tweetTLView);
 		mAdapter = new TweetAdapter(this);
 		list.setAdapter(mAdapter);
-		// Tweet î•ñ
-        mTwitter = TwitterUtils.getTwitterInstance(this);
+		// Tweet ï¿½ï¿½ï¿½ï¿½
+		mTwitter = TwitterUtils.getTwitterInstance(this);
 		reloadTimeLine();
-		
-		
-		// Player Dragon ‰Šú‰»
-		player = new Roll(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER, PLAYER_DEFAULT_DEFEND);
-		enemy = new Roll(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,DRAGON_DEFAULT_DEFEND );
-		
-		// HPƒo[‚Ì‰Šú‰»
+
+		// Player Dragon
+		player = new Roll(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
+				PLAYER_DEFAULT_DEFEND);
+		enemy = new Roll(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
+				DRAGON_DEFAULT_DEFEND);
+
+		// HP
 		playerHpBar = (ProgressBar) findViewById(R.id.playerHpBar);
 		enemyHpBar = (ProgressBar) findViewById(R.id.enemyHpBar);
 		playerHpBar.setMax(PLAYER_DEFAULT_HP);
 		enemyHpBar.setMax(DRAGON_DEFAULT_HP);
 		playerHpBar.setBackgroundColor(Color.GREEN);
 		enemyHpBar.setBackgroundColor(Color.GREEN);
-		
+
 		nowUserHp = enemy.getHp();
 		playerHpBar.setProgress(nowUserHp);
 		nowEnemyHp = enemy.getHp();
 		enemyHpBar.setProgress(nowEnemyHp);
 
-
-		
-		// ƒƒbƒZ[ƒWƒrƒ…[‚Ì‰Šú‰»
+		// ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½rï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		msgView = (TextView) findViewById(R.id.message);
-			
-		//ƒoƒgƒ‹ƒXƒ^[ƒg‚ÌƒAƒ‰[ƒg
+
+		// ï¿½oï¿½gï¿½ï¿½ï¿½Xï¿½^ï¿½[ï¿½gï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½[ï¿½g
 		showToast(getString(R.string.game_start_toast));
-		
-		
-		
-		runEnemyAttack = new Runnable() { public void run() {
-			enemyAttack();
-		}};	
-		udtTxtUsrTurn = new Runnable() { public void run() {
-			msgView.setText("Your Turn Now");
-		} };	
-		udtTxtUsrDmg = new Runnable() { public void run() { 			
-			msgView.setText("Success ! " + enemyDamage + " damage !");
-		} };	
-		udtTxtEnmTurn = new Runnable() { public void run() {
-			msgView.setText("Enemy Turn Now");
-		} };	
-		udtTxtEnmDmg = new Runnable() { public void run() { 
-			msgView.setText(userDamage + " damage !");
-		} };	
-		
+
+		runEnemyAttack = new Runnable() {
+			public void run() {
+				enemyAttack();
+			}
+		};
+		udtTxtUsrTurn = new Runnable() {
+			public void run() {
+				msgView.setText("Your Turn Now");
+			}
+		};
+		udtTxtUsrDmg = new Runnable() {
+			public void run() {
+				msgView.setText("Success ! " + enemyDamage + " damage !");
+			}
+		};
+		udtTxtEnmTurn = new Runnable() {
+			public void run() {
+				msgView.setText("Enemy Turn Now");
+			}
+		};
+		udtTxtEnmDmg = new Runnable() {
+			public void run() {
+				msgView.setText(userDamage + " damage !");
+			}
+		};
+
 		msgView.setText("Encount Dragon !!!");
 		mHandler.postDelayed(udtTxtUsrTurn, 3000);
-			
+
 	}
-	
+
 	@Override
 	public void onStop() {
 		super.onStop();
@@ -179,7 +183,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	@Override
 	public void onResume() {
 		super.onResume();
-		//BGM‚Ì’â~
+		// BGMï¿½ï¿½ï¿½ï¿½ï¿½~
 		bgm = MediaPlayer.create(this, R.raw.bgm);
 		bgm.setLooping(true);
 		try {
@@ -191,43 +195,35 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		}
 		bgm.start();
 	}
-	
+
 	public void onClick(View v) {
-		switch(v.getId()) {
-		case R.id.reloadBtn :
+		switch (v.getId()) {
+		case R.id.reloadBtn:
 			reloadTimeLine();
 			showToast(getString(R.string.reload_toast_msg));
 			break;
-		case R.id.tweetBtn :
+		case R.id.tweetBtn:
 			tweetDialog();
 			break;
-		case R.id.defendBtn :
+		case R.id.defendBtn:
 			break;
 		}
 	}
-	
+
 	// animation
 	public void renderPlayerIcon() {
 		ImageView playerImg = (ImageView) findViewById(R.id.PlayerPicView);
-		// AlphaAnimation(float fromAlpha, float toAlpha)
 		AlphaAnimation alpha = new AlphaAnimation(1, 0);
-		// 1000ms‚ÌŠÔ‚Å
 		alpha.setDuration(1000);
-		// 3‰ñŒJ‚è•Ô‚·
 		alpha.setInterpolator(new CycleInterpolator(3));
-		// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒ^[ƒg
 		playerImg.startAnimation(alpha);
 	}
-	
+
 	public void renderEnemyIcon() {
 		ImageView enemyImg = (ImageView) findViewById(R.id.dragonPicView);
-		// AlphaAnimation(float fromAlpha, float toAlpha)
 		AlphaAnimation alpha = new AlphaAnimation(1, 0);
-		// 1000ms‚ÌŠÔ‚Å
 		alpha.setDuration(1000);
-		// 3‰ñŒJ‚è•Ô‚·
 		alpha.setInterpolator(new CycleInterpolator(3));
-		// ƒAƒjƒ[ƒVƒ‡ƒ“ƒXƒ^[ƒg
 		enemyImg.startAnimation(alpha);
 	}
 
@@ -256,16 +252,16 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						contentsTweet = editView.getText().toString();
-						// Tweet ŠÖ˜A‚Ìˆ—
+						// Tweet ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 						if (contentsTweet != null) {
 							tweet(contentsTweet);
-							// ƒ†[ƒU‚ÌUŒ‚
+							// ï¿½ï¿½ï¿½[ï¿½Uï¿½ï¿½ï¿½Uï¿½ï¿½
 							userAtttack();
-							
-							// ƒ^[ƒ“•\¦•ÏX
+
+							// ï¿½^ï¿½[ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½X
 							mHandler.postDelayed(udtTxtEnmTurn, 3000);
-							
-							// “G‚ÌUŒ‚
+
+							// ï¿½Gï¿½ï¿½ï¿½Uï¿½ï¿½
 							mHandler.postDelayed(runEnemyAttack, 5000);
 						} else {
 							showToast("Empty Input !");
@@ -275,61 +271,68 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		AlertDialog alertDialog = tweetDialog.create();
 		alertDialog.show();
 	}
-	
+
 	/**
-	 * ƒQ[ƒ€ƒI[ƒo[‚Ìƒ_ƒCƒAƒƒO‚ğ¶¬‚µ‚Ü‚·.
+	 * ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+	 * 
 	 * @author tanaka_yut
 	 */
 	private void createFailureDialog() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Failure .......");
-		alertDialogBuilder.setPositiveButton(getString(R.string.retry_btn_label),
+		alertDialogBuilder.setPositiveButton(
+				getString(R.string.retry_btn_label),
 				new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog,	int which) {
+					public void onClick(DialogInterface dialog, int which) {
 						retryGame();
 					}
 				});
-		alertDialogBuilder.setNegativeButton(getString(R.string.totop_btn_label),
+		alertDialogBuilder.setNegativeButton(
+				getString(R.string.totop_btn_label),
 				new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog,	int which) {
+					public void onClick(DialogInterface dialog, int which) {
 						toTop();
 					}
 				});
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		// ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚ğ•\¦
+		// ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½\ï¿½ï¿½
 		alertDialog.show();
 	}
 
 	/**
-	 * ƒQ[ƒ€I—¹‚Ì‘I‘ğƒ_ƒCƒAƒƒO‚ğ¶¬‚µ‚Ü‚·.
+	 * ï¿½Qï¿½[ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+	 * 
 	 * @author tanaka_yut
 	 */
 	private void createEndDialog() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("You Win !!!!!!!!!!!!!!!!.");
-		alertDialogBuilder.setPositiveButton(getString(R.string.retry_btn_label),
+		alertDialogBuilder.setPositiveButton(
+				getString(R.string.retry_btn_label),
 				new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog,	int which) {
+					public void onClick(DialogInterface dialog, int which) {
 						retryGame();
 					}
 				});
-		alertDialogBuilder.setNegativeButton(getString(R.string.totop_btn_label),
+		alertDialogBuilder.setNegativeButton(
+				getString(R.string.totop_btn_label),
 				new DialogInterface.OnClickListener() {
 					@Override
-					public void onClick(DialogInterface dialog,	int which) {
+					public void onClick(DialogInterface dialog, int which) {
 						toTop();
 					}
 				});
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		// ƒAƒ‰[ƒgƒ_ƒCƒAƒƒO‚ğ•\¦
+		// ï¿½Aï¿½ï¿½ï¿½[ï¿½gï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½\ï¿½ï¿½
 		alertDialog.show();
 	}
-	
+
 	/**
-	 * TOP‰æ–Ê‚Ö–ß‚è‚Ü‚·.
+	 * TOPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+	 * 
 	 * @author tanaka_yut
 	 */
 	public void toTop() {
@@ -338,189 +341,173 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	}
 
 	/**
-	 * ƒQ[ƒ€‚ğƒŠƒgƒ‰ƒC‚µ‚Ü‚·.
+	 * ï¿½Qï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+	 * 
 	 * @author tanaka_yut
 	 */
 	public void retryGame() {
-			Intent intent = new Intent(this, BattleActivity.class);
-			startActivity(intent);
-		}
-	
-	
-	private void userAtttack () {
-		
-		// ‰¹‚Æ‰æ‘œˆ—
+		Intent intent = new Intent(this, BattleActivity.class);
+		startActivity(intent);
+	}
+
+	private void userAtttack() {
+
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		playSoundAtk();
 		renderEnemyIcon();
 		playSoundDef();
-		
-		// ƒ_ƒ[ƒWˆ—
+
+		// ï¿½_ï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½
 		enemyDamage = player.userAttack(enemy, contentsTweet);
-		
+
 		mHandler.postDelayed(udtTxtUsrDmg, 1500);
-		
-		// HP ƒo[XV
+
+		// HP ï¿½oï¿½[ï¿½Xï¿½V
 		nowEnemyHp = enemy.getHp();
 		enemyHpBar.setProgress(nowEnemyHp);
 
-		
-		// ‘Šè‚Ì HP ‚É‰‚¶‚½ˆ—
-		if (nowEnemyHp<= 0) {
-			// “G‚Ì‰æ‘œ‚ğˆÃ‚­‚·‚é
-			
-			// HPƒo[‚ğ^‚Á•‚É‚·‚é
-			
-			// Ÿ—˜ƒƒbƒZ[ƒW•\¦
-			
-			// Ÿ—˜‚Ì‰¹ŠyƒXƒ^[ƒg
-			
-			// Ÿ“®ìƒ_ƒCƒAƒƒO•\¦
+		if (nowEnemyHp <= 0) {
 			createEndDialog();
-			//break;
-		} else if (DRAGON_DEFAULT_HP * 0.3 <= nowEnemyHp &&
-				nowEnemyHp <= DRAGON_DEFAULT_HP * 0.6) {
+			// break;
+		} else if (DRAGON_DEFAULT_HP * 0.3 <= nowEnemyHp
+				&& nowEnemyHp <= DRAGON_DEFAULT_HP * 0.6) {
 			enemyHpBar.setBackgroundColor(Color.YELLOW);
-			//break;
+			// break;
 		} else if (nowEnemyHp < DRAGON_DEFAULT_HP * 0.3) {
 			enemyHpBar.setBackgroundColor(Color.RED);
-			//break;
+			// break;
 		}
 	}
-	
-	private void enemyAttack () {
+
+	private void enemyAttack() {
 		/****************
-		 *  ƒhƒ‰ƒSƒ“‚ÌUŒ‚
+		 * ï¿½hï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½
 		 */
-		
-		// ƒ_ƒ[ƒWˆ—
+
+		// ï¿½_ï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½
 		userDamage = enemy.dragonAttack(player);
-		
-		// ‰¹‚Æ‰æ‘œˆ—
+
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		playSoundAtk();
 		renderPlayerIcon();
 		playSoundDef();
-		
-		// HP ƒo[XV
+
+		// HP ï¿½oï¿½[ï¿½Xï¿½V
 		nowUserHp = enemy.getHp();
 		playerHpBar.setProgress(nowUserHp);
-		
-		// ƒ_ƒ[ƒWƒeƒLƒXƒg•\¦
+
+		// ï¿½_ï¿½ï¿½ï¿½[ï¿½Wï¿½eï¿½Lï¿½Xï¿½gï¿½\ï¿½ï¿½
 		mHandler.postDelayed(udtTxtEnmDmg, 2000);
-		
-		// ©•ª‚Ì HP ‚É‰‚¶‚½ˆ—
-		if (nowUserHp<= 0) {
-			// “G‚Ì‰æ‘œ‚ğˆÃ‚­‚·‚é
-			
-			// HPƒo[‚ğ^‚Á•‚É‚·‚é
-			
-			// ”s‘ŞƒƒbƒZ[ƒW•\¦
-			
-			// ”s‘Ş‚Ì‰¹ŠyƒXƒ^[ƒg
-			
-			// Ÿ“®ìƒ_ƒCƒAƒƒO•\¦
+
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ HP ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if (nowUserHp <= 0) {
 			createFailureDialog();
-			
-			//break;
-		} else if (PLAYER_DEFAULT_HP * 0.3 <= nowUserHp &&
-				nowUserHp <= PLAYER_DEFAULT_HP * 0.6) {
+
+			// break;
+		} else if (PLAYER_DEFAULT_HP * 0.3 <= nowUserHp
+				&& nowUserHp <= PLAYER_DEFAULT_HP * 0.6) {
 			playerHpBar.setBackgroundColor(Color.YELLOW);
-			//break;
+			// break;
 		} else if (nowUserHp < PLAYER_DEFAULT_HP * 0.3) {
 			playerHpBar.setBackgroundColor(Color.RED);
-			//break;
+			// break;
 		}
 
 		mHandler.postDelayed(udtTxtUsrTurn, 4000);
-		
+
 	}
-	
+
 	private void tweet(String tweetMsg) {
-        AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(String... params) {
-                try {
-                    mTwitter.updateStatus(params[0]);
-                    return true;
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
+		AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
+			@Override
+			protected Boolean doInBackground(String... params) {
+				try {
+					mTwitter.updateStatus(params[0]);
+					return true;
+				} catch (TwitterException e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    showToast(getString(R.string.tweeted_toast_msg));
-                } else {
-                    showToast(getString(R.string.tweet_failure_msg));
-                }
-            }
-        };
-        task.execute(tweetMsg);
-    }
-	
+			@Override
+			protected void onPostExecute(Boolean result) {
+				if (result) {
+					showToast(getString(R.string.tweeted_toast_msg));
+				} else {
+					showToast(getString(R.string.tweet_failure_msg));
+				}
+			}
+		};
+		task.execute(tweetMsg);
+	}
+
 	private void reloadTimeLine() {
-	    AsyncTask<Void, Void, List<twitter4j.Status>> task = new AsyncTask<Void, Void, List<twitter4j.Status>>() {
-	        @Override
-	        protected List<twitter4j.Status> doInBackground(Void... params) {
-	            try {
-	                return mTwitter.getHomeTimeline();
-	            } catch (TwitterException e) {
-	                e.printStackTrace();
-	            }
-	            return null;
-	        }
+		AsyncTask<Void, Void, List<twitter4j.Status>> task = new AsyncTask<Void, Void, List<twitter4j.Status>>() {
+			@Override
+			protected List<twitter4j.Status> doInBackground(Void... params) {
+				try {
+					return mTwitter.getHomeTimeline();
+				} catch (TwitterException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
 
-	        @Override
-	        protected void onPostExecute(List<twitter4j.Status> result) {
-	            if (result != null) {
-	                mAdapter.clear();
-	                for (twitter4j.Status status : result) {
-	                    mAdapter.add(status);
-	                }
-	                list.setAdapter(mAdapter);
-	            } else {
-	                showToast("ƒ^ƒCƒ€ƒ‰ƒCƒ“‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½BBB");
-	            }
-	        }
-	    };
-	    task.execute();
+			@Override
+			protected void onPostExecute(List<twitter4j.Status> result) {
+				if (result != null) {
+					mAdapter.clear();
+					for (twitter4j.Status status : result) {
+						mAdapter.add(status);
+					}
+					list.setAdapter(mAdapter);
+				} else {
+					showToast("ï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½Bï¿½B");
+				}
+			}
+		};
+		task.execute();
 	}
 
 	private void showToast(String text) {
-	    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
-	
+
 	private class TweetAdapter extends ArrayAdapter<twitter4j.Status> {
 
-	    private LayoutInflater mInflater;
+		private LayoutInflater mInflater;
 
-	    public TweetAdapter(Context context) {
-	        super(context, android.R.layout.simple_list_item_1);
-	        //mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-	        mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-	    }
+		public TweetAdapter(Context context) {
+			super(context, android.R.layout.simple_list_item_1);
+			// mInflater = (LayoutInflater)
+			// context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+			mInflater = (LayoutInflater) context
+					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		}
 
-	    @Override
-	    public View getView(int position, View convertView, ViewGroup parent) {
-	        if (convertView == null) {
-	            convertView = mInflater.inflate(R.layout.list_item_tweet, null);
-	        }
-	        Status item = getItem(position);
-	        
-	        TextView name = (TextView) convertView.findViewById(R.id.name);
-	        name.setText(item.getUser().getName());
-	        
-	        TextView screenName = (TextView) convertView.findViewById(R.id.screen_name);
-	        screenName.setText("@" + item.getUser().getScreenName());
-	        
-	        TextView text = (TextView) convertView.findViewById(R.id.text);
-	        text.setText(item.getText());
-	        
-	        SmartImageView icon = (SmartImageView) convertView.findViewById(R.id.icon);
-	        icon.setImageUrl(item.getUser().getProfileImageURL());
-	        return convertView;
-	    }
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null) {
+				convertView = mInflater.inflate(R.layout.list_item_tweet, null);
+			}
+			Status item = getItem(position);
+
+			TextView name = (TextView) convertView.findViewById(R.id.name);
+			name.setText(item.getUser().getName());
+
+			TextView screenName = (TextView) convertView
+					.findViewById(R.id.screen_name);
+			screenName.setText("@" + item.getUser().getScreenName());
+
+			TextView text = (TextView) convertView.findViewById(R.id.text);
+			text.setText(item.getText());
+
+			SmartImageView icon = (SmartImageView) convertView
+					.findViewById(R.id.icon);
+			icon.setImageUrl(item.getUser().getProfileImageURL());
+			return convertView;
+		}
 	}
-	
+
 }

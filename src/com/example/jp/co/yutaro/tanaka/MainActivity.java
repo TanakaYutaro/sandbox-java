@@ -20,7 +20,6 @@ public class MainActivity extends FragmentActivity {
 			startActivity(intent);
 			finish();
 		} else {
-			// TODO ログインしている場合、ゲームカテゴリ一覧を表示する
 			FragmentManager manager = getSupportFragmentManager();
 			FragmentTransaction transaction = manager.beginTransaction();
 
@@ -28,12 +27,6 @@ public class MainActivity extends FragmentActivity {
 	
 			transaction.replace(android.R.id.content, categoryFragment, "categoryFragment");
 			transaction.commit();
-			
-			/*
-			Intent intent = new Intent(this, BattleActivity.class);
-			startActivity(intent);
-			finish();
-			*/
 		}
 	}
 }
