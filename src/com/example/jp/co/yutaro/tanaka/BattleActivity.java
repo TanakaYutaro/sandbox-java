@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jp.co.yutaro.tanaka.animation.RenderImage;
+import com.example.jp.co.yutaro.tanaka.character.Enemy;
+import com.example.jp.co.yutaro.tanaka.character.Player;
 import com.example.jp.co.yutaro.tanaka.sound.GameSound;
 import com.example.jp.co.yutaro.tanaka.twitter.TweetAdapter;
 import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
@@ -48,7 +50,8 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	private static final int DRAGON_DEFAULT_POWER = 40;
 	private static final int DRAGON_DEFAULT_DEFEND = 40;
 
-	private Roll player, enemy;
+	private Player player;
+	private Enemy enemy;
 	private ProgressBar playerHpBar, enemyHpBar;
 
 	private TextView msgView;
@@ -62,11 +65,11 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 
 	private GameSound mGameSound;
 
-	int enemyDamage;
-	int nowEnemyHp;
+	private int enemyDamage;
+	private int nowEnemyHp;
 
-	int userDamage;
-	int nowUserHp;
+	private int playerDamage;
+	private int nowPlayerHp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,15 +131,15 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		};
 		udtTxtEnmDmg = new Runnable() {
 			public void run() {
-				msgView.setText(userDamage + " damage !");
+				msgView.setText(playerDamage + " damage !");
 			}
 		};
 	}
 
 	private void initRolls() {
-		player = new Roll(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
+		player = new Player(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
 				PLAYER_DEFAULT_DEFEND);
-		enemy = new Roll(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
+		enemy = new Enemy(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
 				DRAGON_DEFAULT_DEFEND);
 
 		playerHpBar = (ProgressBar) findViewById(R.id.playerHpBar);
@@ -146,8 +149,8 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		playerHpBar.setBackgroundColor(Color.GREEN);
 		enemyHpBar.setBackgroundColor(Color.GREEN);
 
-		nowUserHp = enemy.getHp();
-		playerHpBar.setProgress(nowUserHp);
+		nowPlayerHp = enemy.getHp();
+		playerHpBar.setProgress(nowPlayerHp);
 		nowEnemyHp = enemy.getHp();
 		enemyHpBar.setProgress(nowEnemyHp);
 	}
@@ -206,7 +209,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 						if (contentsTweet != null || contentsTweet.equals("")) {
 							// TODO Tweet にハッシュタグを付け加える
 							tweet(contentsTweet);
-							userAtttack();
+							playerAtttack();
 							mHandler.postDelayed(udtTxtEnmTurn, 3000);
 							mHandler.postDelayed(runEnemyAttack, 5000);
 						} else {
@@ -275,7 +278,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		startActivity(intent);
 	}
 
-	private void userAtttack() {
+	private void playerAtttack() {
 		mGameSound.playSoundAtk();
 		mRenderImage.renderCharacterIcon(mEnemyImg);
 		mGameSound.playSoundDef();
@@ -301,26 +304,26 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	}
 
 	private void enemyAttack() {
-		userDamage = enemy.dragonAttack(player);
+		playerDamage = enemy.dragonAttack(player);
 
 		mGameSound.playSoundAtk();
 		mRenderImage.renderCharacterIcon(mPlayerImg);
 		mGameSound.playSoundDef();
 
-		nowUserHp = enemy.getHp();
-		playerHpBar.setProgress(nowUserHp);
+		nowPlayerHp = enemy.getHp();
+		playerHpBar.setProgress(nowPlayerHp);
 
 		mHandler.postDelayed(udtTxtEnmDmg, 2000);
 
-		if (nowUserHp <= 0) {
+		if (nowPlayerHp <= 0) {
 			createFailureDialog();
 
 			// break;
-		} else if (PLAYER_DEFAULT_HP * 0.3 <= nowUserHp
-				&& nowUserHp <= PLAYER_DEFAULT_HP * 0.6) {
+		} else if (PLAYER_DEFAULT_HP * 0.3 <= nowPlayerHp
+				&& nowPlayerHp <= PLAYER_DEFAULT_HP * 0.6) {
 			playerHpBar.setBackgroundColor(Color.YELLOW);
 			// break;
-		} else if (nowUserHp < PLAYER_DEFAULT_HP * 0.3) {
+		} else if (nowPlayerHp < PLAYER_DEFAULT_HP * 0.3) {
 			playerHpBar.setBackgroundColor(Color.RED);
 			// break;
 		}
