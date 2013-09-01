@@ -255,15 +255,11 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 					public void onClick(DialogInterface dialog, int which) {
 						contentsTweet = editView.getText().toString();
 						// Tweet
-						if (contentsTweet != null) {
+						// TODO 入力チェック
+						if (contentsTweet != null || contentsTweet.equals("")) {
 							tweet(contentsTweet);
-							// ���[�U���U��
 							userAtttack();
-
-							// �^�[���\�����X
 							mHandler.postDelayed(udtTxtEnmTurn, 3000);
-
-							// �G���U��
 							mHandler.postDelayed(runEnemyAttack, 5000);
 						} else {
 							showToast("Empty Input !");
@@ -271,6 +267,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 					}
 				});
 		AlertDialog alertDialog = tweetDialog.create();
+		// TODO ESCキー無効化
 		alertDialog.show();
 	}
 
@@ -294,7 +291,6 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 					}
 				});
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		// �A���[�g�_�C�A���O���\��
 		alertDialog.show();
 	}
 
@@ -318,43 +314,28 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 					}
 				});
 		AlertDialog alertDialog = alertDialogBuilder.create();
-		// �A���[�g�_�C�A���O���\��
 		alertDialog.show();
 	}
 
-	/**
-	 * TOP��������������.
-	 * 
-	 * @author tanaka_yut
-	 */
 	public void toTop() {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
 
-	/**
-	 * �Q�[�������g���C������.
-	 * 
-	 * @author tanaka_yut
-	 */
 	public void retryGame() {
 		Intent intent = new Intent(this, BattleActivity.class);
 		startActivity(intent);
 	}
 
 	private void userAtttack() {
-
-		// ������������
 		playSoundAtk();
 		renderEnemyIcon();
 		playSoundDef();
 
-		// �_���[�W����
 		enemyDamage = player.userAttack(enemy, contentsTweet);
 
 		mHandler.postDelayed(udtTxtUsrDmg, 1500);
 
-		// HP �o�[�X�V
 		nowEnemyHp = enemy.getHp();
 		enemyHpBar.setProgress(nowEnemyHp);
 
@@ -372,26 +353,17 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	}
 
 	private void enemyAttack() {
-		/****************
-		 * �h���S�����U��
-		 */
-
-		// �_���[�W����
 		userDamage = enemy.dragonAttack(player);
 
-		// ������������
 		playSoundAtk();
 		renderPlayerIcon();
 		playSoundDef();
 
-		// HP �o�[�X�V
 		nowUserHp = enemy.getHp();
 		playerHpBar.setProgress(nowUserHp);
 
-		// �_���[�W�e�L�X�g�\��
 		mHandler.postDelayed(udtTxtEnmDmg, 2000);
 
-		// ������ HP ������������
 		if (nowUserHp <= 0) {
 			createFailureDialog();
 
@@ -466,5 +438,4 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
 
-	
 }
