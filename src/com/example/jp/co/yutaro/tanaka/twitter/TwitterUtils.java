@@ -1,4 +1,7 @@
-package com.example.jp.co.yutaro.tanaka;
+package com.example.jp.co.yutaro.tanaka.twitter;
+
+import com.example.jp.co.yutaro.tanaka.R;
+import com.example.jp.co.yutaro.tanaka.R.string;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
@@ -14,7 +17,7 @@ public class TwitterUtils {
     private static final String PREF_NAME = "twitter_access_token";
 
     /**
-     * TwitterƒCƒ“ƒXƒ^ƒ“ƒX‚ğæ“¾‚µ‚Ü‚·BƒAƒNƒZƒXƒg[ƒNƒ“‚ª•Û‘¶‚³‚ê‚Ä‚¢‚ê‚Î©“®“I‚ÉƒZƒbƒg‚µ‚Ü‚·B
+     * Twitterï¿½Cï¿½ï¿½ï¿½Xï¿½^ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½æ“¾ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Aï¿½Nï¿½Zï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Û‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½ï¿½Iï¿½ÉƒZï¿½bï¿½gï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
      * @param context
      * @return
      */
@@ -33,7 +36,7 @@ public class TwitterUtils {
     }
 
     /**
-     * ƒAƒNƒZƒXƒg[ƒNƒ“‚ğƒvƒŠƒtƒ@ƒŒƒ“ƒX‚É•Û‘¶‚µ‚Ü‚·B
+     * ï¿½Aï¿½Nï¿½Zï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½É•Û‘ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @param context
      * @param accessToken
@@ -48,7 +51,7 @@ public class TwitterUtils {
     }
 
     /**
-     * ƒAƒNƒZƒXƒg[ƒNƒ“‚ğƒvƒŠƒtƒ@ƒŒƒ“ƒX‚©‚ç“Ç‚İ‚İ‚Ü‚·B
+     * ï¿½Aï¿½Nï¿½Zï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½Ç‚İï¿½ï¿½İ‚Ü‚ï¿½ï¿½B
      * 
      * @param context
      * @return
@@ -66,7 +69,7 @@ public class TwitterUtils {
     }
 
     /**
-     * ƒAƒNƒZƒXƒg[ƒNƒ“‚ª‘¶İ‚·‚éê‡‚Ítrue‚ğ•Ô‚µ‚Ü‚·B
+     * ï¿½Aï¿½Nï¿½Zï¿½Xï¿½gï¿½[ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½trueï¿½ï¿½Ô‚ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @return
      */

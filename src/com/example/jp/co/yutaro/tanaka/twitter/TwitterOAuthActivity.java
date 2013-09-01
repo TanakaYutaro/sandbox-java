@@ -1,4 +1,10 @@
-package com.example.jp.co.yutaro.tanaka;
+package com.example.jp.co.yutaro.tanaka.twitter;
+
+import com.example.jp.co.yutaro.tanaka.MainActivity;
+import com.example.jp.co.yutaro.tanaka.R;
+import com.example.jp.co.yutaro.tanaka.R.id;
+import com.example.jp.co.yutaro.tanaka.R.layout;
+import com.example.jp.co.yutaro.tanaka.R.string;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -34,7 +40,7 @@ public class TwitterOAuthActivity extends Activity {
     }
 
     /**
-     * OAuth”FØiŒµ–§‚É‚Í”F‰Âj‚ğŠJn‚µ‚Ü‚·B
+     * OAuthï¿½Fï¿½Øiï¿½ï¿½ï¿½ï¿½ï¿½É‚Í”Fï¿½Âjï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B
      * 
      * @param listener
      */
@@ -57,7 +63,7 @@ public class TwitterOAuthActivity extends Activity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                 } else {
-                    // ¸”sBBB
+                    // ï¿½ï¿½ï¿½sï¿½Bï¿½Bï¿½B
                 }
             }
         };
@@ -87,12 +93,12 @@ public class TwitterOAuthActivity extends Activity {
             @Override
             protected void onPostExecute(AccessToken accessToken) {
                 if (accessToken != null) {
-                    // ”FØ¬Œ÷I
-                    showToast("”FØ¬Œ÷I");
+                    // ï¿½Fï¿½Øï¿½ï¿½ï¿½ï¿½I
+                    showToast("ï¿½Fï¿½Øï¿½ï¿½ï¿½ï¿½I");
                     successOAuth(accessToken);
                 } else {
-                    // ”FØ¸”sBBB
-                    showToast("”FØ¸”sBBB");
+                    // ï¿½Fï¿½Øï¿½ï¿½sï¿½Bï¿½Bï¿½B
+                    showToast("ï¿½Fï¿½Øï¿½ï¿½sï¿½Bï¿½Bï¿½B");
                 }
             }
         };

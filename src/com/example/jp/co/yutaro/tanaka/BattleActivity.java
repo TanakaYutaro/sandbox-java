@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.jp.co.yutaro.tanaka.twitter.TweetAdapter;
+import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
 import com.loopj.android.image.SmartImageView;
 
 import twitter4j.ResponseList;

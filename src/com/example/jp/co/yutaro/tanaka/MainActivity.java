@@ -1,5 +1,8 @@
 package com.example.jp.co.yutaro.tanaka;
 
+import com.example.jp.co.yutaro.tanaka.twitter.TwitterOAuthActivity;
+import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
