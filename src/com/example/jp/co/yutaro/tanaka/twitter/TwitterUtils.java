@@ -16,8 +16,8 @@ public class TwitterUtils {
 	private static final String PREF_NAME = "twitter_access_token";
 
 	/**
-	 * Twitter�C���X�^���X���擾���܂��B�A�N�Z�X�g�[�N�����ۑ�����Ă���Ύ����I�ɃZ�b�g�
-	 * ��܂��B
+	 * Twitter���C���������X���^���������X�����������������������������B���A���N���Z���X���g���[���N���������������������������������������������������������I�����Z���b���g���
+	 * ��������������B
 	 * 
 	 * @param context
 	 * @return
@@ -38,7 +38,7 @@ public class TwitterUtils {
 	}
 
 	/**
-	 * �A�N�Z�X�g�[�N�����v���t�@�����X�ɕۑ����܂��B
+	 * ���A���N���Z���X���g���[���N���������������v���������t���@���������������X���������������������������B
 	 * 
 	 * @param context
 	 * @param accessToken
@@ -53,7 +53,7 @@ public class TwitterUtils {
 	}
 
 	/**
-	 * �A�N�Z�X�g�[�N�����v���t�@�����X����ǂݍ��݂܂��B
+	 * ���A���N���Z���X���g���[���N���������������v���������t���@���������������X��������������������������������B
 	 * 
 	 * @param context
 	 * @return
@@ -71,7 +71,7 @@ public class TwitterUtils {
 	}
 
 	/**
-	 * �A�N�Z�X�g�[�N�������݂���ꍇ��true��Ԃ��܂��B
+	 * ���A���N���Z���X���g���[���N�����������������������������������������true����������������������B
 	 * 
 	 * @return
 	 */

@@ -23,5 +23,7 @@
     <string name="totop_btn_label">TOP</string>
     <string name="Category_Dragon_Battle">Dragon</string>
     <string name="category_fragment_title">Game Category</string>
-
+	<string name="Category_English_Study">English</string>
+	<string name="Twi_Dra_Hash_Tag">#TestMyApp</string>
+    
 </resources>

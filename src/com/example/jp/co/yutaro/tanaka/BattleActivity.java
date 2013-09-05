@@ -207,8 +207,10 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 						// TODO 入力チェック
 						// TODO 文字数制限
 						if (contentsTweet != null || contentsTweet.equals("")) {
-							// TODO Tweet にハッシュタグを付け加える
-							tweet(contentsTweet);
+							// Tweet にハッシュタグを付け加える
+							String tweetBody = getString(R.string.Twi_Dra_Hash_Tag)
+									+ " " + contentsTweet;
+							tweet(tweetBody);
 							playerAtttack();
 							mHandler.postDelayed(udtTxtEnmTurn, 3000);
 							mHandler.postDelayed(runEnemyAttack, 5000);

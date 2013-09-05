@@ -33,6 +33,8 @@ public class CategoryFragment extends Fragment implements OnClickListener {
 			Intent intent = new Intent(getActivity(), BattleActivity.class);
 			startActivity(intent);
 			break;
+		case R.id.button_start_english:
+
 		}
 	}
 
