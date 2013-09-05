@@ -52,11 +52,12 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	private static final int DRAGON_DEFAULT_POWER = 40;
 	private static final int DRAGON_DEFAULT_DEFEND = 40;
 
-	private Player player;
+	private Player mPlayer;
 	private Enemy enemy;
 	private ProgressBar playerHpBar, enemyHpBar;
 
-	private TextView msgView;
+	private TextView msgView, mPlayerHpView, mPlayerPowerView,
+			mPlayerDefendView;
 
 	private ImageView mPlayerImg, mEnemyImg;
 	private RenderImage mRenderImage;
@@ -96,6 +97,10 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		reloadTimeLine();
 
 		initRolls(mTwitter);
+
+		mPlayerHpView = (TextView) findViewById(R.id.playerHp);
+		mPlayerPowerView = (TextView) findViewById(R.id.playerPower);
+		mPlayerDefendView = (TextView) findViewById(R.id.playerDefend);
 
 		mGameSound = new GameSound(this);
 
@@ -139,7 +144,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	}
 
 	private void initRolls(Twitter twitter) {
-		player = new Player(twitter);
+		mPlayer = new Player(twitter);
 		// player = new Player(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
 		// PLAYER_DEFAULT_DEFEND);
 		enemy = new Enemy(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
@@ -156,6 +161,12 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		playerHpBar.setProgress(nowPlayerHp);
 		nowEnemyHp = enemy.getHp();
 		enemyHpBar.setProgress(nowEnemyHp);
+	}
+
+	private void reloadStatus() {
+		mPlayerHpView.setText(mPlayer.getHp());
+		mPlayerPowerView.setText(mPlayer.getPower());
+		mPlayerDefendView.setText(mPlayer.getDefend());
 	}
 
 	@Override
@@ -288,7 +299,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		mRenderImage.renderCharacterIcon(mEnemyImg);
 		mGameSound.playSoundDef();
 
-		enemyDamage = player.userAttack(enemy, contentsTweet);
+		enemyDamage = mPlayer.userAttack(enemy, contentsTweet);
 
 		mHandler.postDelayed(udtTxtUsrDmg, 1500);
 
@@ -309,7 +320,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	}
 
 	private void enemyAttack() {
-		playerDamage = enemy.dragonAttack(player);
+		playerDamage = enemy.dragonAttack(mPlayer);
 
 		mGameSound.playSoundAtk();
 		mRenderImage.renderCharacterIcon(mPlayerImg);
@@ -319,6 +330,8 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		playerHpBar.setProgress(nowPlayerHp);
 
 		mHandler.postDelayed(udtTxtEnmDmg, 2000);
+		// TODO ゲーム開始前に実行すると、NullPoで落ちる
+		reloadStatus();
 
 		if (nowPlayerHp <= 0) {
 			createFailureDialog();

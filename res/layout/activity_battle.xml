@@ -84,4 +84,28 @@
         android:textColor="#ffffff"
         android:gravity="center"/>
 
+    <TextView
+        android:id="@+id/playerHp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tweetBtn"
+        android:layout_below="@+id/enemyHpBar"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/playerPower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/playerHp"
+        android:layout_below="@+id/playerHp"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/playerDefend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/playerPower"
+        android:layout_below="@+id/playerPower"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
 </RelativeLayout>
