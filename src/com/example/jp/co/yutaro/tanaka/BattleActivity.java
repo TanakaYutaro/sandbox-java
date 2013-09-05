@@ -95,7 +95,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		mTwitter = TwitterUtils.getTwitterInstance(this);
 		reloadTimeLine();
 
-		initRolls();
+		initRolls(mTwitter);
 
 		mGameSound = new GameSound(this);
 
@@ -138,9 +138,10 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		};
 	}
 
-	private void initRolls() {
-		player = new Player(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
-				PLAYER_DEFAULT_DEFEND);
+	private void initRolls(Twitter twitter) {
+		player = new Player(twitter);
+		// player = new Player(PLAYER_DEFAULT_HP, PLAYER_DEFAULT_POWER,
+		// PLAYER_DEFAULT_DEFEND);
 		enemy = new Enemy(DRAGON_DEFAULT_HP, DRAGON_DEFAULT_POWER,
 				DRAGON_DEFAULT_DEFEND);
 
