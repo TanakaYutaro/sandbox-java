@@ -3,6 +3,8 @@ package com.example.jp.co.yutaro.tanaka;
 import java.io.IOException;
 import java.util.List;
 
+import twitter4j.Query;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.app.AlertDialog;
@@ -359,13 +361,23 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		task.execute(tweetMsg);
 	}
 
+	private List<Status> searchTweet(Twitter twitter, String target)
+			throws TwitterException {
+		Query query = new Query();
+		// 「自分のアカウント」 &「ハッシュタグのツイート」のみ表示
+		// スペースで区切ると AND 検索になる
+		query.setQuery(target + " " + "from:" + twitter.getScreenName());
+		return twitter.search(query).getTweets();
+	}
+
 	private void reloadTimeLine() {
 		AsyncTask<Void, Void, List<twitter4j.Status>> task = new AsyncTask<Void, Void, List<twitter4j.Status>>() {
 			@Override
 			protected List<twitter4j.Status> doInBackground(Void... params) {
 				try {
-					// TODO ハッシュタグのツイートのみ表示
-					return mTwitter.getHomeTimeline();
+					return searchTweet(mTwitter,
+							getString(R.string.Twi_Dra_Hash_Tag));
+					// return mTwitter.getHomeTimeline();
 				} catch (TwitterException e) {
 					e.printStackTrace();
 				}
