@@ -25,5 +25,7 @@
     <string name="category_fragment_title">Game Category</string>
 	<string name="Category_English_Study">English</string>
 	<string name="Twi_Dra_Hash_Tag">#TestMyApp</string>
+		<string name="menu_bgm_label">BGM</string>
+	
     
 </resources>

@@ -1,6 +1,5 @@
 package com.example.jp.co.yutaro.tanaka;
 
-import java.io.IOException;
 import java.util.List;
 
 import twitter4j.Query;
@@ -11,13 +10,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -179,16 +179,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 	@Override
 	public void onResume() {
 		super.onResume();
-		mGameSound.bgm = MediaPlayer.create(this, R.raw.bgm);
-		mGameSound.bgm.setLooping(true);
-		try {
-			mGameSound.bgm.prepare();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		mGameSound.bgm.start();
+		mGameSound.soundsInit(this, R.raw.bgm);
 	}
 
 	public void onClick(View v) {
@@ -331,7 +322,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 
 		mHandler.postDelayed(udtTxtEnmDmg, 2000);
 		// TODO ゲーム開始前に実行すると、NullPoで落ちる
-		reloadStatus();
+		// reloadStatus();
 
 		if (nowPlayerHp <= 0) {
 			createFailureDialog();
@@ -416,6 +407,29 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 
 	private void showToast(String text) {
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.bgm:
+			if (mGameSound.getSoundOn()) {
+				mGameSound.bgm.stop();
+				mGameSound.bgm.release();
+			} else {
+				mGameSound.soundsInit(this, R.raw.bgm);
+			}
+			mGameSound.switchBgm();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }
