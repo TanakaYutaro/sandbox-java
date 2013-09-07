@@ -15,6 +15,12 @@ import android.widget.Toast;
 import com.example.jp.co.yutaro.tanaka.MainActivity;
 import com.example.jp.co.yutaro.tanaka.R;
 
+/**
+ * Twitter サービスへの認証をする.
+ * 
+ * @author gain-glory-victory
+ * 
+ */
 public class TwitterOAuthActivity extends Activity {
 	private String mCallbackURL;
 	private Twitter mTwitter;
@@ -38,9 +44,7 @@ public class TwitterOAuthActivity extends Activity {
 	}
 
 	/**
-	 * OAuth�F�؁i�����ɂ͔F�j���J�n���܂��B
-	 * 
-	 * @param listener
+	 * OAuth 認証（認可）を開始する.
 	 */
 	private void startAuthorize() {
 		AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
@@ -92,12 +96,10 @@ public class TwitterOAuthActivity extends Activity {
 			@Override
 			protected void onPostExecute(AccessToken accessToken) {
 				if (accessToken != null) {
-					// �F�ؐ����I
-					showToast("�F�ؐ����I");
+					showToast("Success OAuth");
 					successOAuth(accessToken);
 				} else {
-					// �F�؎��s�B�B�B
-					showToast("�F�؎��s�B�B�B");
+					showToast("Fail OAuth");
 				}
 			}
 		};

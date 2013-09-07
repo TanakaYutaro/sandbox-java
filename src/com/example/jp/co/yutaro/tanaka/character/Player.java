@@ -6,12 +6,18 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
 
+/**
+ * ユーザのクラス.
+ * 
+ * @author gain-glory-victory
+ * 
+ */
 public class Player implements Roll {
 
 	private int hp, power, defend;
 
 	/**
-	 * コンストラクタ.
+	 * デフォルトコンストラクタ.
 	 */
 	public Player() {
 		this.hp = 0;
@@ -20,7 +26,7 @@ public class Player implements Roll {
 	}
 
 	/**
-	 * コンストラクタ.
+	 * パラメータ指定コンストラクタ.
 	 * 
 	 * @param hp
 	 * @param power
@@ -35,8 +41,12 @@ public class Player implements Roll {
 	/**
 	 * コンストラクタ.
 	 * 
+	 * @param twitter
+	 *            Twitterのインスタンス.
 	 * @throws TwitterException
+	 *             エクセプション
 	 * @throws IllegalStateException
+	 *             エクセプション
 	 */
 	public Player(Twitter twitter) {
 
@@ -44,17 +54,17 @@ public class Player implements Roll {
 		try {
 			user = twitter.showUser(twitter.getScreenName());
 		} catch (IllegalStateException e) {
-			// TODO 自動生成された catch ブロック
+			// TODO 処理追加
 			e.printStackTrace();
 		} catch (TwitterException e) {
-			// TODO 自動生成された catch ブロック
+			// TODO 処理追加
 			e.printStackTrace();
 		}
 		ResponseList<Status> tweetList = null;
 		try {
 			tweetList = twitter.getUserTimeline(user.getId());
 		} catch (TwitterException e) {
-			// TODO 自動生成された catch ブロック
+			// TODO 処理追加
 			e.printStackTrace();
 		}
 		this.hp = tweetList.size();
@@ -64,7 +74,7 @@ public class Player implements Roll {
 		try {
 			System.out.println("ScreenName : " + twitter.getScreenName());
 		} catch (IllegalStateException e) {
-			// TODO 自動生成された catch ブロック
+			// TODO 処理追加
 			e.printStackTrace();
 		} catch (TwitterException e) {
 			// TODO 自動生成された catch ブロック
@@ -96,61 +106,31 @@ public class Player implements Roll {
 		return damage;
 	}
 
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see com.example.jp.co.yutaro.tanaka.character.Roll#getHp()
-	 */
 	@Override
 	public int getHp() {
 		return hp;
 	}
 
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see com.example.jp.co.yutaro.tanaka.character.Roll#setHp(int)
-	 */
 	@Override
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
 
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see com.example.jp.co.yutaro.tanaka.character.Roll#getPower()
-	 */
 	@Override
 	public int getPower() {
 		return power;
 	}
 
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see com.example.jp.co.yutaro.tanaka.character.Roll#setPower(int)
-	 */
 	@Override
 	public void setPower(int power) {
 		this.power = power;
 	}
 
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see com.example.jp.co.yutaro.tanaka.character.Roll#getDefend()
-	 */
 	@Override
 	public int getDefend() {
 		return defend;
 	}
 
-	/*
-	 * (非 Javadoc)
-	 * 
-	 * @see com.example.jp.co.yutaro.tanaka.character.Roll#setDefend(int)
-	 */
 	@Override
 	public void setDefend(int defend) {
 		this.defend = defend;

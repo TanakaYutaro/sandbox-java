@@ -35,6 +35,12 @@ import com.example.jp.co.yutaro.tanaka.sound.GameSound;
 import com.example.jp.co.yutaro.tanaka.twitter.TweetAdapter;
 import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
 
+/**
+ * バトルのアクティビティ.
+ * 
+ * @author gain-glory-victory
+ * 
+ */
 public class BattleActivity extends FragmentActivity implements OnClickListener {
 
 	private String contentsTweet;
@@ -163,6 +169,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		enemyHpBar.setProgress(nowEnemyHp);
 	}
 
+	// TODO ステータスを画面に表示したいが実行すると NullPointerで落ちる
 	private void reloadStatus() {
 		mPlayerHpView.setText(mPlayer.getHp());
 		mPlayerPowerView.setText(mPlayer.getPower());
@@ -275,12 +282,12 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		alertDialog.show();
 	}
 
-	public void toTop() {
+	private void toTop() {
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}
 
-	public void retryGame() {
+	private void retryGame() {
 		Intent intent = new Intent(this, BattleActivity.class);
 		startActivity(intent);
 	}
@@ -409,6 +416,9 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
 
+	/**
+	 * オプショメニューのカスタマイズ.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -416,6 +426,9 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		return true;
 	}
 
+	/**
+	 * オプションメニュークリック時の挙動.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

@@ -9,6 +9,12 @@ import android.support.v4.app.FragmentTransaction;
 import com.example.jp.co.yutaro.tanaka.twitter.TwitterOAuthActivity;
 import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
 
+/**
+ * Twitter認証のアクティビティ.
+ * 
+ * @author gain-glory-victory
+ * 
+ */
 public class MainActivity extends FragmentActivity {
 
 	@Override

@@ -8,8 +8,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+/**
+ * ゲームカテゴリ選択のフラグメント.
+ * 
+ * @author gain-glory-victory
+ * 
+ */
 public class CategoryFragment extends Fragment implements OnClickListener {
 
+	/**
+	 * インスタンスを生成する.
+	 * 
+	 * @return フラグメントのインスタンス.
+	 */
 	public static CategoryFragment newInstance() {
 		CategoryFragment categoryFragment = new CategoryFragment();
 		return categoryFragment;
