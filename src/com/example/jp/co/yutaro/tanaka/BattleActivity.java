@@ -93,7 +93,7 @@ public class BattleActivity extends FragmentActivity implements OnClickListener 
 		defendBtn.setOnClickListener(this);
 
 		mPlayerImg = (ImageView) findViewById(R.id.PlayerPicView);
-		mEnemyImg = (ImageView) findViewById(R.id.dragonPicView);
+		mEnemyImg = (ImageView) findViewById(R.id.godPicView);
 		mRenderImage = new RenderImage();
 
 		list = (ListView) findViewById(R.id.tweetTLView);

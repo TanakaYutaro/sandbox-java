@@ -93,7 +93,7 @@ public class QuizActivity extends FragmentActivity implements OnClickListener {
 		defendBtn.setOnClickListener(this);
 
 		mPlayerImg = (ImageView) findViewById(R.id.PlayerPicView);
-		mEnemyImg = (ImageView) findViewById(R.id.dragonPicView);
+		mEnemyImg = (ImageView) findViewById(R.id.godPicView);
 		mRenderImage = new RenderImage();
 
 		list = (ListView) findViewById(R.id.tweetTLView);
@@ -102,7 +102,7 @@ public class QuizActivity extends FragmentActivity implements OnClickListener {
 		mTwitter = TwitterUtils.getTwitterInstance(this);
 		reloadTimeLine();
 
-		initRolls(mTwitter);
+		// initRolls(mTwitter);
 
 		mPlayerHpView = (TextView) findViewById(R.id.playerHp);
 		mPlayerPowerView = (TextView) findViewById(R.id.playerPower);
@@ -114,7 +114,7 @@ public class QuizActivity extends FragmentActivity implements OnClickListener {
 
 		showToast(getString(R.string.game_start_toast));
 
-		initRunnable();
+		// initRunnable();
 
 		msgView.setText("Encount Dragon !!!");
 		mHandler.postDelayed(udtTxtUsrTurn, 3000);
