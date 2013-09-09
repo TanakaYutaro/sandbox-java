@@ -22,10 +22,18 @@
     <string name="retry_btn_label">Retry</string>
     <string name="totop_btn_label">TOP</string>
     <string name="Category_Dragon_Battle">Dragon</string>
-    <string name="category_fragment_title">Game Category</string>
-	<string name="Category_English_Study">English</string>
+
 	<string name="Twi_Dra_Hash_Tag">#TestMyApp</string>
 		<string name="menu_bgm_label">BGM</string>
 	
+		
+		    <string name="category_fragment_title">Game Category</string>
+	<string name="Category_English_Study">English</string>
+	<string name="Category_Japanese">Japanese</string>
+
+		<string name="Category_IT">Information Technology</string>
+			<string name="Category_Current_Topics">Current Topics</string>
+		
+		
     
 </resources>

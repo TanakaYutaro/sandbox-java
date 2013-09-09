@@ -41,11 +41,15 @@ public class CategoryFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button_start_dragon:
-			Intent intent = new Intent(getActivity(), BattleActivity.class);
-			startActivity(intent);
+			Intent intentBattle = new Intent(getActivity(),
+					BattleActivity.class);
+			startActivity(intentBattle);
 			break;
 		case R.id.button_start_english:
-
+			// TODO それぞれのパラメータを渡す
+			Intent intentQuiz = new Intent(getActivity(), QuizActivity.class);
+			startActivity(intentQuiz);
+			break;
 		}
 	}
 
