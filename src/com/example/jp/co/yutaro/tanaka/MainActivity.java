@@ -10,7 +10,7 @@ import com.example.jp.co.yutaro.tanaka.twitter.TwitterOAuthActivity;
 import com.example.jp.co.yutaro.tanaka.twitter.TwitterUtils;
 
 /**
- * Twitter認証のアクティビティ.
+ * メインアクティビティ.
  * 
  * @author gain-glory-victory
  * 
