@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TweetAndDragons</string>
+    <string name="action_settings">Settings</string>
+    <string name="twitter_consumer_key">sL4OzDEBfB2nihN4Lh3lbg</string>
+    <string name="twitter_consumer_secret">RpnkOeBFfFvjnA3OPY7uzPN9TSCpVbgPSbewvddfGM</string>
+    <string name="twitter_oauth">Twitter Autholize</string>
+    <string name="twitter_callback_url">gabu://twitter</string>
+    <string name="tweet_button_label">Tweet ATK</string>
+    <string name="tweet_dialog_title">Tweet Attack !!!</string>
+    <string name="tweet_dialog_message">Enter your Tweet</string>
+    <string name="tweet_dialog_btn_ok">OK</string>
+    
+    
+    <string name="game_start_toast">Encounting Dragon !</string>
+    <string name="tweeted_toast_msg">Success Tweet Attack !</string>
+    <string name="reload_toast_msg">TimeLine Reloading !</string>
+    <string name="defend_toast_msg">Defensing !</string>
+    <string name="tweet_failure_msg">Tweet Attack Miss !</string>
+    
+    <string name="retry_btn_label">Retry</string>
+    <string name="totop_btn_label">TOP</string>
+    <string name="Category_Dragon_Battle">Dragon</string>
+
+	<string name="Twi_Dra_Hash_Tag">#TestMyApp</string>
+		<string name="menu_bgm_label">BGM</string>
+	
+		
+		    <string name="category_fragment_title">Game Category</string>
+	<string name="Category_English_Study">English</string>
+	<string name="Category_Japanese">Japanese</string>
+
+		<string name="Category_IT">Information Technology</string>
+			<string name="Category_Current_Topics">Current Topics</string>
+		
+		
+    
+</resources>
